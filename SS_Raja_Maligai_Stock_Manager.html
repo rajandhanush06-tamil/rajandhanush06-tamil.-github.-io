@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#176b45">
+<meta name="description" content="SS Raja Maligai grocery stock, sales and expense manager">
+
+<title>SS Raja Maligai</title>
+<style>
+:root{--green:#176b45;--green2:#21865a;--bg:#f4f7f5;--card:#fff;--text:#18231d;--muted:#64736a;--line:#dce6df;--red:#b42318;--amber:#9a6700}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px system-ui,-apple-system,"Noto Sans Tamil",sans-serif}
+header{background:linear-gradient(135deg,var(--green),#104b32);color:#fff;padding:20px 16px 18px;border-radius:0 0 22px 22px}
+.headrow{display:flex;align-items:center;justify-content:space-between;gap:10px}.brand{font-weight:800;font-size:21px;line-height:1.2}.sub{font-size:12px;opacity:.85;margin-top:5px}
+button,input,select{font:inherit}button{border:0;border-radius:12px;padding:11px 13px;background:var(--green);color:#fff;font-weight:700;cursor:pointer}button.secondary{background:#e8f2ec;color:var(--green)}button.danger{background:#fff0ef;color:var(--red)}button.small{padding:7px 9px;font-size:12px;border-radius:9px}
+main{max-width:900px;margin:auto;padding:14px 12px 90px}.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:12px 0 15px}.tab{background:#e4ece7;color:#365446;padding:10px 4px;font-size:12px;border-radius:11px}.tab.active{background:var(--green);color:#fff}
+.page{display:none}.page.active{display:block}.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.stat,.panel,.product{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:0 2px 8px #183c2610}.stat .label{font-size:12px;color:var(--muted)}.stat .value{font-size:22px;font-weight:800;margin-top:5px;overflow-wrap:anywhere}.stat .hint{font-size:11px;color:var(--muted);margin-top:3px}
+h2{font-size:18px;margin:8px 0 12px}h3{font-size:15px;margin:0 0 10px}.sectionhead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:18px 0 10px}.muted{color:var(--muted);font-size:12px}.alert{background:#fff6df;border:1px solid #f2d48b;color:#714b00;border-radius:12px;padding:11px;margin-top:10px}.empty{padding:25px 10px;text-align:center;color:var(--muted)}
+label{display:block;font-size:12px;font-weight:700;color:#526158;margin:9px 0 5px}input,select{width:100%;padding:11px;border:1px solid #cfdcd3;border-radius:10px;background:#fff;color:var(--text);min-width:0}form .grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.full{grid-column:1/-1}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.list{display:grid;gap:9px}.producttop{display:flex;justify-content:space-between;gap:10px}.pname{font-weight:800;font-size:15px}.price{font-weight:800;color:var(--green)}.productmeta{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:7px}.badge{display:inline-block;border-radius:99px;padding:4px 8px;font-size:11px;font-weight:700;background:#e8f5ed;color:#176b45}.badge.low{background:#fff0d2;color:#8b5700}.badge.out{background:#ffe8e6;color:#b42318}.inline{display:flex;gap:8px;align-items:center}.inline input{flex:1}.tablewrap{overflow-x:auto}.historyrow{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);padding:10px 0;font-size:13px}.historyrow:last-child{border-bottom:0}.moneypos{color:var(--green);font-weight:800}.moneyneg{color:var(--red);font-weight:800}.note{font-size:12px;color:var(--muted);line-height:1.5}.footer{text-align:center;color:var(--muted);font-size:11px;margin:22px 0 5px}.hide{display:none!important}
+@media(min-width:650px){.stats{grid-template-columns:repeat(4,minmax(0,1fr))}.tabs{max-width:600px}.tab{font-size:14px}.list{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<header><div class="headrow"><div><div class="brand">🛒 SS Raja Maligai</div><div class="sub" id="tagline">Grocery Stock & Daily Accounts</div></div><button class="secondary small" id="langBtn">தமிழ்</button></div></header>
+<main>
+<div class="tabs">
+<button class="tab active" data-page="dashboard" id="tab-dashboard">Home</button>
+<button class="tab" data-page="stock" id="tab-stock">Stock</button>
+<button class="tab" data-page="sales" id="tab-sales">Sales</button>
+<button class="tab" data-page="accounts" id="tab-accounts">Accounts</button>
+</div>
+<section class="page active" id="page-dashboard">
+<h2 id="welcome">Today's overview</h2>
+<div class="stats">
+<div class="stat"><div class="label" data-en="Products" data-ta="பொருட்கள்">Products</div><div class="value" id="statProducts">0</div><div class="hint" data-en="Different items" data-ta="வகைகள்">Different items</div></div>
+<div class="stat"><div class="label" data-en="Stock value (cost)" data-ta="இருப்பு மதிப்பு (கொள்முதல்)">Stock value (cost)</div><div class="value" id="statStock">₹0</div><div class="hint" data-en="Current inventory" data-ta="தற்போதைய இருப்பு">Current inventory</div></div>
+<div class="stat"><div class="label" data-en="Today's sales" data-ta="இன்றைய விற்பனை">Today's sales</div><div class="value" id="statSales">₹0</div><div class="hint" data-en="Sales recorded today" data-ta="இன்று பதிவு செய்த விற்பனை">Sales recorded today</div></div>
+<div class="stat"><div class="label" data-en="Today's net estimate" data-ta="இன்றைய நிகர மதிப்பீடு">Today's net estimate</div><div class="value" id="statProfit">₹0</div><div class="hint" data-en="Sales − item cost − expenses" data-ta="விற்பனை − பொருள் செலவு − செலவுகள்">Sales − item cost − expenses</div></div>
+</div>
+<div id="lowAlert"></div>
+<div class="sectionhead"><h2 id="quickTitle">Quick actions</h2></div>
+<div class="actions"><button id="quickAdd">＋ <span data-en="Add product" data-ta="பொருள் சேர்க்க">Add product</span></button><button class="secondary" id="quickSale">＋ <span data-en="Record sale" data-ta="விற்பனை பதிவு">Record sale</span></button><button class="secondary" id="quickExpense">＋ <span data-en="Add expense" data-ta="செலவு சேர்க்க">Add expense</span></button></div>
+<div class="sectionhead"><h2 id="recentTitle">Recent activity</h2><span class="muted" id="todayDate"></span></div>
+<div class="panel" id="recentList"><div class="empty">No activity yet</div></div>
+<div class="footer" id="dataHint">Your data is saved on this device. Export a backup regularly.</div>
+</section>
+
+<section class="page" id="page-stock">
+<div class="sectionhead"><h2 id="stockTitle">Product stock</h2><button id="addProductBtn">＋ <span data-en="Add" data-ta="சேர்">Add</span></button></div>
+<div class="inline"><input id="searchProducts" placeholder="Search product / பொருள் தேடல்"><select id="stockFilter" style="max-width:140px"><option value="all">All stock</option><option value="low">Low stock</option><option value="out">Out of stock</option></select></div>
+<div class="list" id="productList" style="margin-top:12px"></div>
+<div class="panel hide" id="productFormPanel" style="margin-top:12px">
+<h3 id="productFormTitle">Add product</h3>
+<form id="productForm">
+<input type="hidden" id="editId">
+<div class="grid">
+<div class="full"><label for="pname" data-en="Product name" data-ta="பொருளின் பெயர்">Product name</label><input id="pname" required placeholder="e.g. Rice / அரிசி"></div>
+<div><label for="pqty" data-en="Quantity in stock" data-ta="இருப்பு அளவு">Quantity in stock</label><input id="pqty" type="number" min="0" step="any" required placeholder="0"></div>
+<div><label for="punit" data-en="Unit" data-ta="அலகு">Unit</label><select id="punit"><option>packet</option><option>kg</option><option>g</option><option>litre</option><option>ml</option><option>piece</option><option>box</option><option>bottle</option><option>dozen</option></select></div>
+<div><label for="pcost" data-en="Purchase cost per unit (₹)" data-ta="ஒரு அலகு கொள்முதல் விலை (₹)">Purchase cost per unit (₹)</label><input id="pcost" type="number" min="0" step="0.01" required placeholder="0.00"></div>
+<div><label for="psell" data-en="Selling price per unit (₹)" data-ta="ஒரு அலகு விற்பனை விலை (₹)">Selling price per unit (₹)</label><input id="psell" type="number" min="0" step="0.01" required placeholder="0.00"></div>
+<div><label for="pmin" data-en="Low-stock alert at" data-ta="குறைந்த இருப்பு எச்சரிக்கை அளவு">Low-stock alert at</label><input id="pmin" type="number" min="0" step="any" value="5" required></div>
+<div><label for="pcat" data-en="Category (optional)" data-ta="வகை (விருப்பம்)">Category (optional)</label><input id="pcat" placeholder="e.g. Rice, Snacks"></div>
+</div>
+<div class="actions"><button type="submit" id="saveProductBtn">Save product</button><button type="button" class="secondary" id="cancelProductBtn">Cancel</button></div>
+</form></div>
+</section>
+
+<section class="page" id="page-sales">
+<h2 id="salesTitle">Record a sale</h2>
+<div class="panel">
+<form id="saleForm">
+<div class="grid">
+<div class="full"><label for="saleProduct" data-en="Product" data-ta="பொருள்">Product</label><select id="saleProduct" required></select></div>
+<div><label for="saleQty" data-en="Quantity sold" data-ta="விற்ற அளவு">Quantity sold</label><input id="saleQty" type="number" min="0.001" step="any" value="1" required></div>
+<div><label for="salePrice" data-en="Selling price per unit (₹)" data-ta="ஒரு அலகு விற்பனை விலை (₹)">Selling price per unit (₹)</label><input id="salePrice" type="number" min="0" step="0.01" required></div>
+<div class="full"><label for="saleNote" data-en="Note (optional)" data-ta="குறிப்பு (விருப்பம்)">Note (optional)</label><input id="saleNote" placeholder="Customer / bill note"></div>
+</div>
+<div class="note" id="saleHint">Stock will be reduced automatically after recording the sale.</div>
+<div class="actions"><button type="submit" id="recordSaleBtn">Record sale</button></div>
+</form>
+</div>
+<div class="sectionhead"><h2 id="salesHistoryTitle">Today's sales</h2><span class="muted" id="salesTotal">₹0</span></div><div class="panel" id="salesHistory"></div>
+</section>
+
+<section class="page" id="page-accounts">
+<h2 id="accountsTitle">Expenses & profit</h2>
+<div class="stats">
+<div class="stat"><div class="label" data-en="Today's revenue" data-ta="இன்றைய வருவாய்">Today's revenue</div><div class="value" id="accRevenue">₹0</div></div>
+<div class="stat"><div class="label" data-en="Cost of items sold" data-ta="விற்ற பொருட்களின் கொள்முதல் செலவு">Cost of items sold</div><div class="value" id="accCost">₹0</div></div>
+<div class="stat"><div class="label" data-en="Today's expenses" data-ta="இன்றைய செலவுகள்">Today's expenses</div><div class="value" id="accExpenses">₹0</div></div>
+<div class="stat"><div class="label" data-en="Estimated net profit" data-ta="மதிப்பிடப்பட்ட நிகர லாபம்">Estimated net profit</div><div class="value" id="accProfit">₹0</div></div>
+</div>
+<div class="sectionhead"><h2 id="expenseTitle">Add an expense</h2></div>
+<div class="panel"><form id="expenseForm"><div class="grid">
+<div class="full"><label for="expenseName" data-en="Expense description" data-ta="செலவு விவரம்">Expense description</label><input id="expenseName" required placeholder="e.g. Transport, electricity, shop rent"></div>
+<div><label for="expenseAmount" data-en="Amount (₹)" data-ta="தொகை (₹)">Amount (₹)</label><input id="expenseAmount" type="number" min="0.01" step="0.01" required></div>
+<div><label for="expenseDate" data-en="Date" data-ta="தேதி">Date</label><input id="expenseDate" type="date" required></div>
+</div><div class="actions"><button type="submit" id="addExpenseBtn">Add expense</button></div></form></div>
+<div class="sectionhead"><h2 id="expenseHistoryTitle">Today's expenses list</h2></div><div class="panel" id="expenseHistory"></div>
+<div class="sectionhead"><h2 id="backupTitle">Backup & data</h2></div>
+<div class="panel"><p class="note" id="backupNote">Export a backup file before changing phones or clearing browser data. Import a previous backup to restore it.</p><div class="actions"><button id="exportBtn">Export backup</button><button class="secondary" id="importBtn">Import backup</button><input type="file" id="importFile" accept="application/json,.json" class="hide"><button class="danger" id="clearBtn">Clear all data</button></div></div>
+</section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const today=()=>new Date().toLocaleDateString('en-CA');
+const money=n=>'₹'+Number(n||0).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+let state={products:[],sales:[],expenses:[]};
+let lang='en';
+const translations={
+'en':{'tagline':'Grocery Stock & Daily Accounts','tab-dashboard':'Home','tab-stock':'Stock','tab-sales':'Sales','tab-accounts':'Accounts','welcome':"Today's overview",'quickTitle':'Quick actions','recentTitle':'Recent activity','dataHint':'Your data is saved on this device. Export a backup regularly.','stockTitle':'Product stock','productFormTitle':'Add product','saveProductBtn':'Save product','cancelProductBtn':'Cancel','salesTitle':'Record a sale','salesHistoryTitle':"Today's sales",'saleHint':'Stock will be reduced automatically after recording the sale.','recordSaleBtn':'Record sale','accountsTitle':'Expenses & profit','expenseTitle':'Add an expense','addExpenseBtn':'Add expense','expenseHistoryTitle':"Today's expenses list",'backupTitle':'Backup & data','backupNote':'Export a backup file before changing phones or clearing browser data. Import a previous backup to restore it.','allStock':'All stock','lowStock':'Low stock','outStock':'Out of stock','search':'Search product / பொருள் தேடல்','noProducts':'No products yet. Tap Add to start.','noSales':'No sales recorded today.','noExpenses':'No expenses recorded today.','noActivity':'No activity yet','lowAlert':'Low-stock items','edit':'Edit','delete':'Delete','save':'Save product','update':'Update product','confirmDelete':'Delete this product? Past sales will remain in reports.','needProduct':'Add a product before recording a sale.','notEnough':'Not enough stock available.','saleSaved':'Sale recorded; stock updated.','expenseSaved':'Expense saved.','productSaved':'Product saved.','importSuccess':'Backup imported successfully.','badBackup':'Could not read backup file.','clearConfirm':'Permanently clear all products, sales and expenses on this device? Export a backup first.','clearDone':'All app data cleared.','exported':'Backup exported.','sale':'Sale','expense':'Expense','stock':'Stock','qty':'Qty','cost':'Cost','sell':'Sell','revenue':'Revenue','profit':'Profit','category':'Category','today':'Today','stockValue':'Stock value','items':'items','empty':'No records yet.','gross':'Sales − item cost − expenses','qtyLeft':'left','choose':'Choose a product','expense':'Expense','salePrice':'Selling price per unit (₹)','purchaseCost':'Purchase cost per unit (₹)','amount':'Amount (₹)','date':'Date','item':'Product','stockReduced':'Stock reduced automatically.'},
+'ta':{'tagline':'மளிகை இருப்பு மற்றும் தினசரி கணக்கு','tab-dashboard':'முகப்பு','tab-stock':'இருப்பு','tab-sales':'விற்பனை','tab-accounts':'கணக்கு','welcome':'இன்றைய நிலவரம்','quickTitle':'விரைவு செயல்கள்','recentTitle':'சமீபத்திய செயல்கள்','dataHint':'தரவு இந்த சாதனத்தில் சேமிக்கப்படும். அடிக்கடி காப்புப் பிரதி எடுக்கவும்.','stockTitle':'பொருள் இருப்பு','productFormTitle':'பொருள் சேர்க்க','saveProductBtn':'சேமிக்க','cancelProductBtn':'ரத்து','salesTitle':'விற்பனை பதிவு','salesHistoryTitle':'இன்றைய விற்பனை','saleHint':'விற்பனையை பதிவு செய்ததும் இருப்பு தானாக குறையும்.','recordSaleBtn':'விற்பனை பதிவு','accountsTitle':'செலவு மற்றும் லாபம்','expenseTitle':'செலவு சேர்க்க','addExpenseBtn':'செலவு சேர்க்க','expenseHistoryTitle':'இன்றைய செலவுகள்','backupTitle':'காப்புப் பிரதி மற்றும் தரவு','backupNote':'மொபைலை மாற்றும் முன் அல்லது உலாவி தரவை அழிக்கும் முன் காப்புப் பிரதி எடுக்கவும்.','allStock':'அனைத்து இருப்பு','lowStock':'குறைந்த இருப்பு','outStock':'இருப்பு இல்லை','search':'பொருள் தேடல்','noProducts':'பொருட்கள் இல்லை. சேர்க்க பொத்தானை அழுத்தவும்.','noSales':'இன்று விற்பனை பதிவு இல்லை.','noExpenses':'இன்று செலவு பதிவு இல்லை.','noActivity':'செயல்பாடுகள் இல்லை','lowAlert':'குறைந்த இருப்பு பொருட்கள்','edit':'திருத்து','delete':'நீக்கு','save':'சேமிக்க','update':'புதுப்பிக்க','confirmDelete':'இந்த பொருளை நீக்கவா? பழைய விற்பனை அறிக்கையில் இருக்கும்.','needProduct':'விற்பனைக்கு முன் ஒரு பொருளை சேர்க்கவும்.','notEnough':'போதுமான இருப்பு இல்லை.','saleSaved':'விற்பனை பதிவு செய்யப்பட்டது; இருப்பு புதுப்பிக்கப்பட்டது.','expenseSaved':'செலவு சேமிக்கப்பட்டது.','productSaved':'பொருள் சேமிக்கப்பட்டது.','importSuccess':'காப்புப் பிரதி வெற்றிகரமாக இறக்குமதி செய்யப்பட்டது.','badBackup':'காப்புப் பிரதியை படிக்க முடியவில்லை.','clearConfirm':'இந்த சாதனத்தில் உள்ள அனைத்து பொருட்கள், விற்பனை, செலவுகளை நிரந்தரமாக அழிக்கவா? முதலில் காப்புப் பிரதி எடுக்கவும்.','clearDone':'அனைத்து தரவும் அழிக்கப்பட்டது.','exported':'காப்புப் பிரதி ஏற்றுமதி செய்யப்பட்டது.','sale':'விற்பனை','expense':'செலவு','stock':'இருப்பு','qty':'அளவு','cost':'கொள்முதல்','sell':'விற்பனை','revenue':'வருவாய்','profit':'லாபம்','category':'வகை','today':'இன்று','stockValue':'இருப்பு மதிப்பு','items':'பொருட்கள்','empty':'பதிவுகள் இல்லை.','gross':'விற்பனை − பொருள் செலவு − செலவுகள்','qtyLeft':'மீதம்','choose':'பொருளை தேர்ந்தெடுக்கவும்','salePrice':'ஒரு அலகு விற்பனை விலை (₹)','purchaseCost':'ஒரு அலகு கொள்முதல் விலை (₹)','amount':'தொகை (₹)','date':'தேதி','item':'பொருள்','stockReduced':'இருப்பு தானாக குறையும்.'}
+};
+function tr(k){return (translations[lang]&&translations[lang][k])||translations.en[k]||k}
+function persist(){localStorage.setItem('ssRajaMaligaiData',JSON.stringify(state));render()}
+function read(){try{const d=JSON.parse(localStorage.getItem('ssRajaMaligaiData')||'{}');state={products:Array.isArray(d.products)?d.products:[],sales:Array.isArray(d.sales)?d.sales:[],expenses:Array.isArray(d.expenses)?d.expenses:[]}}catch(e){}}
+function setPage(name){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id==='page-'+name));document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.page===name));if(name==='stock')renderProducts();if(name==='sales')renderSales();if(name==='accounts')renderAccounts()}
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>setPage(b.dataset.page)));
+function goAdd(){setPage('stock');resetProductForm();$('productFormPanel').classList.remove('hide');$('pname').focus()}
+$('quickAdd').onclick=goAdd;$('addProductBtn').onclick=goAdd;$('quickSale').onclick=()=>setPage('sales');$('quickExpense').onclick=()=>setPage('accounts');
+$('langBtn').onclick=()=>{lang=lang==='en'?'ta':'en';document.documentElement.lang=lang==='ta'?'ta':'en';$('langBtn').textContent=lang==='en'?'தமிழ்':'English';applyLanguage();render()};
+function applyLanguage(){document.querySelectorAll('[data-en][data-ta]').forEach(el=>el.textContent=el.dataset[lang]);Object.keys(translations[lang]).forEach(id=>{const el=$(id);if(el)el.textContent=translations[lang][id]});$('searchProducts').placeholder=tr('search');$('stockFilter').options[0].text=tr('allStock');$('stockFilter').options[1].text=tr('lowStock');$('stockFilter').options[2].text=tr('outStock');}
+function resetProductForm(){ $('productForm').reset();$('editId').value='';$('pmin').value=5;$('productFormTitle').textContent=tr('productFormTitle');$('saveProductBtn').textContent=tr('save');$('productFormPanel').classList.add('hide') }
+$('cancelProductBtn').onclick=resetProductForm;
+$('productForm').addEventListener('submit',e=>{e.preventDefault();const id=$('editId').value||String(Date.now());const old=state.products.find(p=>p.id===id);const p={id,name:$('pname').value.trim(),qty:Number($('pqty').value),unit:$('punit').value,cost:Number($('pcost').value),price:Number($('psell').value),min:Number($('pmin').value),category:$('pcat').value.trim()};if(!p.name)return;if(old){state.products=state.products.map(x=>x.id===id?p:x)}else state.products.push(p);resetProductForm();persist();alert(tr('productSaved'))});
+function editProduct(id){const p=state.products.find(x=>x.id===id);if(!p)return;$('editId').value=p.id;$('pname').value=p.name;$('pqty').value=p.qty;$('punit').value=p.unit;$('pcost').value=p.cost;$('psell').value=p.price;$('pmin').value=p.min;$('pcat').value=p.category||'';$('productFormTitle').textContent=tr('edit')+' · '+p.name;$('saveProductBtn').textContent=tr('update');$('productFormPanel').classList.remove('hide');$('productFormPanel').scrollIntoView({behavior:'smooth',block:'start'})}
+function deleteProduct(id){if(confirm(tr('confirmDelete'))){state.products=state.products.filter(p=>p.id!==id);persist()}}
+$('searchProducts').addEventListener('input',renderProducts);$('stockFilter').onchange=renderProducts;
+function renderProducts(){const q=$('searchProducts').value.toLowerCase();const filter=$('stockFilter').value;let arr=state.products.filter(p=>p.name.toLowerCase().includes(q)||(p.category||'').toLowerCase().includes(q));if(filter==='low')arr=arr.filter(p=>p.qty>0&&p.qty<=p.min);if(filter==='out')arr=arr.filter(p=>p.qty<=0);const box=$('productList');box.innerHTML='';if(!arr.length){box.innerHTML='<div class="panel empty">'+(state.products.length?tr('empty'):tr('noProducts'))+'</div>';return}arr.forEach(p=>{const status=p.qty<=0?'<span class="badge out">Out of stock</span>':p.qty<=p.min?'<span class="badge low">Low stock</span>':'<span class="badge">In stock</span>';const el=document.createElement('div');el.className='product';el.innerHTML=`<div class="producttop"><div><div class="pname"></div><div class="productmeta"></div></div><div class="price"></div></div><div class="productmeta">${status} <span>${tr('qty')}: ${p.qty} ${p.unit}</span><span>${tr('cost')}: ${money(p.cost)}</span></div><div class="actions"><button class="small" data-edit="${p.id}">${tr('edit')}</button><button class="small danger" data-delete="${p.id}">${tr('delete')}</button></div>`;el.querySelector('.pname').textContent=p.name;el.querySelector('.productmeta').textContent=p.category||'';el.querySelector('.price').textContent=money(p.price);box.appendChild(el)});box.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editProduct(b.dataset.edit));box.querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>deleteProduct(b.dataset.delete))}
+function renderSaleOptions(){const sel=$('saleProduct'),prev=sel.value;sel.innerHTML='';if(!state.products.length){sel.innerHTML=`<option value="">${tr('needProduct')}</option>`;$('salePrice').value='';return}sel.innerHTML=`<option value="">${tr('choose')}</option>`+state.products.map(p=>`<option value="${p.id}">${escapeHtml(p.name)} — ${p.qty} ${p.unit} left</option>`).join('');if(state.products.some(p=>p.id===prev))sel.value=prev;else sel.value=state.products[0].id;updateSalePrice()}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function updateSalePrice(){const p=state.products.find(x=>x.id===$('saleProduct').value);if(p)$('salePrice').value=p.price}
+$('saleProduct').onchange=updateSalePrice;
+$('saleForm').addEventListener('submit',e=>{e.preventDefault();const p=state.products.find(x=>x.id===$('saleProduct').value);if(!p){alert(tr('needProduct'));return}const qty=Number($('saleQty').value),price=Number($('salePrice').value);if(qty<=0||qty>p.qty){alert(tr('notEnough'));return}state.sales.push({id:String(Date.now()),productId:p.id,name:p.name,qty,unit:p.unit,price,cost:p.cost,total:qty*price,costTotal:qty*p.cost,note:$('saleNote').value.trim(),date:today(),time:new Date().toISOString()});p.qty-=qty;$('saleQty').value=1;$('saleNote').value='';persist();alert(tr('saleSaved'));setPage('sales')});
+$('expenseDate').value=today();
+$('expenseForm').addEventListener('submit',e=>{e.preventDefault();state.expenses.push({id:String(Date.now()),name:$('expenseName').value.trim(),amount:Number($('expenseAmount').value),date:$('expenseDate').value||today(),time:new Date().toISOString()});$('expenseForm').reset();$('expenseDate').value=today();persist();alert(tr('expenseSaved'))});
+function todaySales(){return state.sales.filter(s=>s.date===today())}function todayExpenses(){return state.expenses.filter(x=>x.date===today())}
+function renderSales(){renderSaleOptions();const ss=todaySales();$('salesTotal').textContent=money(ss.reduce((a,s)=>a+s.total,0));$('salesHistory').innerHTML=ss.length?ss.slice().reverse().map(s=>`<div class="historyrow"><div><b>${escapeHtml(s.name)}</b><div class="muted">${s.qty} ${s.unit} × ${money(s.price)}${s.note?' · '+escapeHtml(s.note):''}</div></div><div class="moneypos">${money(s.total)}</div></div>`).join(''):`<div class="empty">${tr('noSales')}</div>`}
+function renderAccounts(){const ss=todaySales(),ee=todayExpenses(),rev=ss.reduce((a,s)=>a+s.total,0),cost=ss.reduce((a,s)=>a+s.costTotal,0),exp=ee.reduce((a,x)=>a+x.amount,0);$('accRevenue').textContent=money(rev);$('accCost').textContent=money(cost);$('accExpenses').textContent=money(exp);$('accProfit').textContent=money(rev-cost-exp);$('expenseHistory').innerHTML=ee.length?ee.slice().reverse().map(x=>`<div class="historyrow"><div><b>${escapeHtml(x.name)}</b><div class="muted">${x.date}</div></div><div class="moneyneg">−${money(x.amount)}</div></div>`).join(''):`<div class="empty">${tr('noExpenses')}</div>`}
+function renderDashboard(){const ss=todaySales(),ee=todayExpenses(),rev=ss.reduce((a,s)=>a+s.total,0),cost=ss.reduce((a,s)=>a+s.costTotal,0),exp=ee.reduce((a,x)=>a+x.amount,0);$('statProducts').textContent=state.products.length;$('statStock').textContent=money(state.products.reduce((a,p)=>a+p.qty*p.cost,0));$('statSales').textContent=money(rev);$('statProfit').textContent=money(rev-cost-exp);$('todayDate').textContent=new Date().toLocaleDateString(lang==='ta'?'ta-IN':'en-IN');const lows=state.products.filter(p=>p.qty<=p.min);$('lowAlert').innerHTML=lows.length?`<div class="alert"><b>⚠️ ${tr('lowAlert')} (${lows.length})</b><div style="margin-top:5px">${lows.slice(0,6).map(p=>escapeHtml(p.name)+' — '+p.qty+' '+p.unit).join('<br>')}</div></div>`:'';const acts=[...ss.map(s=>({time:s.time,label:s.name,sub:tr('sale'),amt:s.total,kind:'sale'})),...ee.map(x=>({time:x.time,label:x.name,sub:tr('expense'),amt:x.amount,kind:'expense'}))].sort((a,b)=>(b.time||'').localeCompare(a.time||'')).slice(0,6);$('recentList').innerHTML=acts.length?acts.map(a=>`<div class="historyrow"><div><b>${escapeHtml(a.label)}</b><div class="muted">${a.sub}</div></div><div class="${a.kind==='sale'?'moneypos':'moneyneg'}">${a.kind==='sale'?'+':'−'}${money(a.amt)}</div></div>`).join(''):`<div class="empty">${tr('noActivity')}</div>`}
+function render(){renderDashboard();renderProducts();renderSales();renderAccounts()}
+$('exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify({...state,exportedAt:new Date().toISOString()},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='SS-Raja-Maligai-backup-'+today()+'.json';a.click();URL.revokeObjectURL(a.href);alert(tr('exported'))};
+$('importBtn').onclick=()=>$('importFile').click();$('importFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const d=JSON.parse(await f.text());if(!Array.isArray(d.products)||!Array.isArray(d.sales)||!Array.isArray(d.expenses))throw Error();state={products:d.products,sales:d.sales,expenses:d.expenses};persist();alert(tr('importSuccess'))}catch(err){alert(tr('badBackup'))}e.target.value=''};
+$('clearBtn').onclick=()=>{if(confirm(tr('clearConfirm'))){state={products:[],sales:[],expenses:[]};persist();alert(tr('clearDone'))}};
+if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+read();applyLanguage();render();
+</script>
+</body></html>
